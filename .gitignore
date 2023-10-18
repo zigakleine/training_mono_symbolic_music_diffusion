@@ -1,0 +1,14 @@
+/checkpoints
+/results
+models/__pycache__
+/__pycache__
+
+/lakh_encoded
+/lakh_encoded_mono
+/nesmdb_encoded
+/nesmdb_encoded_mono
+/multitrack_vae_model
+*.so
+/cat-mel_2bar_big.tar
+/*_epoch_batch.pkl
+.idea/
