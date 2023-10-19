@@ -152,7 +152,7 @@ def train():
     epochs_num = 350
     # lr = 1.81e-5
     lr = 3e-5
-    batch_size = 2048
+    batch_size = 1024
     current_dir = os.getcwd()
     to_save_dir = "/storage/local/ssd/zigakleine-workspace"
     # to_save_dir = os.getcwd()
@@ -166,7 +166,7 @@ def train():
     model = TransformerDDPME(categories).to(device)
     optimizer = optim.AdamW(model.parameters(), lr=lr)
     # scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=2000, gamma=0.98)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, factor=0.5, patience=25)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, factor=0.5, patience=30)
 
     mse = nn.MSELoss()
 
@@ -272,8 +272,8 @@ def train():
     for epoch in range(epochs_num):
 
         logging.info(f"Starting epoch {starting_epoch + epoch}:")
-        pbar = tqdm(train_loader)
-        # pbar = train_loader
+        # pbar = tqdm(train_loader)
+        pbar = train_loader
 
         train_count = 0
         train_loss_sum = 0
@@ -347,7 +347,7 @@ def train():
             torch.save(checkpoint, min_model_abs_path)
 
         sampled_latents = diffusion.sample(model, 1, None, cfg_scale=0)
-        batch_transformed = inverse_data_transform(torch.Tensor.cpu(sampled_latents), dmin, dmax, std_devs_masks)
+        batch_transformed = inverse_data_transform(torch.Tensor.cpu(sampled_latents), dmin, dmax)
 
         generated_batch_abs_path = os.path.join(to_save_dir, "results", run_name, "generated", f"{starting_epoch + epoch}_epoch_batch.pkl")
         file = open(generated_batch_abs_path, 'wb')

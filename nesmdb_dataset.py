@@ -22,8 +22,8 @@ class NesmdbMidiDataset(Dataset):
         self.metadata_folder = "db_metadata"
         self.database_folder = "nesmdb"
         self.current_dir = os.getcwd()
-        # self.encoded_dir = "/storage/local/ssd/zigakleine-workspace"
-        self.encoded_dir = os.getcwd()
+        self.encoded_dir = "/storage/local/ssd/zigakleine-workspace"
+        # self.encoded_dir = os.getcwd()
         self.all_nesmdb_metadata = []
         self.metadata_filename = "nesmdb_updated2808.pkl"
 
@@ -33,7 +33,7 @@ class NesmdbMidiDataset(Dataset):
         nesmdb_metadata_abs_path = os.path.join(self.current_dir, self.metadata_folder, self.database_folder,
                                                 self.metadata_filename)
         metadata = pickle.load(open(nesmdb_metadata_abs_path, "rb"))
-        sequences_num = 0
+        # sequences_num = 0
         for game in metadata:
             for song in metadata[game]["songs"]:
                 if song["is_encodable"]:
@@ -43,16 +43,16 @@ class NesmdbMidiDataset(Dataset):
                     for song_rel_url in song_rel_urls:
                         # if song_rel_url == "nesmdb_encoded/322_SuperMarioBros_/0*+0*p1-p2-tr-no.pkl":
 
-                        if song_rel_url[-6:] == "p1.pkl":
-                            emotion_q = self.emotions[song["emotion_pred_p1"]]
-                        elif song_rel_url[-6:] == "p2.pkl":
-                            emotion_q = self.emotions[song["emotion_pred_p2"]]
+                        # if song_rel_url[-6:] == "p1.pkl":
+                        #     emotion_q = self.emotions[song["emotion_pred_p1"]]
+                        # elif song_rel_url[-6:] == "p2.pkl":
+                        #     emotion_q = self.emotions[song["emotion_pred_p2"]]
 
                         for i in range(song["num_sequences"]):
 
                             sequence = {"url": song_rel_url, "index": i, "emotion": emotion_q}
                             self.all_nesmdb_metadata.append(sequence)
-                            sequences_num += 1
+                            # sequences_num += 1
 
 
     def __getitem__(self, index):
