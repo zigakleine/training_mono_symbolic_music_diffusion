@@ -149,7 +149,7 @@ def train():
             gpu_name = torch.cuda.get_device_name(i)
             print(f"GPU {i}: {gpu_name}")
 
-    epochs_num = 350
+    epochs_num = 150
     # lr = 1.81e-5
     lr = 3e-5
     batch_size = 512
@@ -166,17 +166,17 @@ def train():
     model = TransformerDDPME(categories).to(device)
     optimizer = optim.AdamW(model.parameters(), lr=lr)
     # scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=2000, gamma=0.98)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, factor=0.5, patience=30)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, factor=0.5, patience=15)
 
     mse = nn.MSELoss()
 
-    is_lakh = False
+    is_lakh = True
     continue_training = False
     start_from_pretrained_model = False
 
 
     if is_lakh:
-        run_name = "ddpm_lakh"
+        run_name = "ddpm_lakh_1910_mono"
 
     else:
         run_name = "ddpm_nesmdb_1910_mono"
@@ -244,7 +244,7 @@ def train():
 
     if is_lakh:
         dataset = LakhMidiDataset(transform=normalize_dataset, dmin=dmin, dmax=dmax)
-        train_ds, test_ds = torch.utils.data.random_split(dataset, [272702, 8434])
+        train_ds, test_ds = torch.utils.data.random_split(dataset, [490135, 15158])
 
     else:
         dataset = NesmdbMidiDataset(transform=normalize_dataset, dmin=dmin, dmax=dmax)

@@ -40,15 +40,10 @@ class LakhMidiDataset(Dataset):
         enc_seq = pickle.load(open(enc_seq_abs_path, "rb"))
         enc_seq = enc_seq[self.all_lakh_metadata[index]["index"]]
 
-
         if self.transform:
             enc_seq = self.transform(enc_seq, -14., 14.)
 
-
-        enc_seq_tracks = np.split(enc_seq, 4, axis=0)
-        enc_seq_hstacked = np.hstack(enc_seq_tracks)
-
-        return enc_seq_hstacked, -1
+        return enc_seq, -1
 
     def __len__(self):
         return len(self.all_lakh_metadata)
