@@ -61,8 +61,8 @@ categories = {"emotions": 4}
 
 model = TransformerDDPME(categories).to(device)
 optimizer = optim.AdamW(model.parameters(), lr=lr)
-scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=500, gamma=0.98)
-# scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, factor=0.5, patience=500)
+# scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=500, gamma=0.98)
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, factor=0.5, patience=700)
 mse = nn.MSELoss()
 
 setup_logging(run_name, current_dir)
@@ -107,8 +107,8 @@ for epoch in range(epochs_num):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    scheduler.step()
-    # scheduler.step(train_loss)
+    # scheduler.step()
+    scheduler.step(train_loss)
 
     train_losses.append(train_loss)
     current_lr = optimizer.param_groups[0]['lr']
