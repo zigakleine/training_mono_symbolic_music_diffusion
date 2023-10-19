@@ -49,7 +49,7 @@ def setup_logging(run_name, current_dir):
 
 dmin = -14.
 dmax = 14.
-epochs_num = 50002
+epochs_num = 25000
 lr = 3e-5
 batch_size = 1
 current_dir = os.getcwd()
@@ -74,8 +74,8 @@ diffusion = Diffusion(noise_steps=model.num_timesteps, batch_size=batch_size, vo
 train_losses = []
 
 current_dir = os.getcwd()
-to_save_dir = "/storage/local/ssd/zigakleine-workspace"
-# to_save_dir = os.getcwd()
+# to_save_dir = "/storage/local/ssd/zigakleine-workspace"
+to_save_dir = os.getcwd()
 
 songs_path = "./training_song_mono.pkl"
 songs = pickle.load(open(songs_path, "rb"))
