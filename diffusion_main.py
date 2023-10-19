@@ -149,7 +149,7 @@ def train():
             gpu_name = torch.cuda.get_device_name(i)
             print(f"GPU {i}: {gpu_name}")
 
-    epochs_num = 150
+    epochs_num = 200
     # lr = 1.81e-5
     lr = 3e-5
     batch_size = 512
