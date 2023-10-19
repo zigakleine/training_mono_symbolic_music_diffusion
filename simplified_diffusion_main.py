@@ -55,7 +55,7 @@ batch_size = 1
 current_dir = os.getcwd()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 training_data_type = "song_red"
-run_name = "mono_overfit_test_1"
+run_name = "mono_overfit_test_2"
 
 categories = {"emotions": 4}
 
