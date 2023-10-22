@@ -112,16 +112,8 @@ def inverse_data_transform(batch, data_min, data_max):
     batch = (batch + 1.) / 2.
     batch = (data_max - data_min) * batch + data_min
     batch = batch.numpy()
-    batch_ = []
-    for enc_tracks in batch:
 
-        enc_tracks_split = np.split(enc_tracks, 4, axis=1)
-        enc_tracks_reconstructed = enc_tracks_split
-
-        enc_tracks_reconstructed = np.vstack(enc_tracks_reconstructed)
-        batch_.append(enc_tracks_reconstructed)
-
-    return np.array(batch_)
+    return batch
 
 
 def choose_labels_emotion(l, is_lakh):
@@ -149,7 +141,7 @@ def train():
             gpu_name = torch.cuda.get_device_name(i)
             print(f"GPU {i}: {gpu_name}")
 
-    epochs_num = 200
+    epochs_num = 350
     # lr = 1.81e-5
     lr = 3e-5
     batch_size = 512
@@ -166,34 +158,35 @@ def train():
     model = TransformerDDPME(categories).to(device)
     optimizer = optim.AdamW(model.parameters(), lr=lr)
     # scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=2000, gamma=0.98)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, factor=0.5, patience=15)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', verbose=True, factor=0.5, patience=30)
 
     mse = nn.MSELoss()
 
-    is_lakh = True
+    is_lakh = False
     continue_training = False
-    start_from_pretrained_model = False
+    start_from_pretrained_model = True
 
 
     if is_lakh:
         run_name = "ddpm_lakh_1910_mono"
 
     else:
-        run_name = "ddpm_nesmdb_1910_mono"
+        run_name = "ddpm_lakh_nes_1910_mono"
 
     if start_from_pretrained_model:
-        existing_model_run_name = "ddpm_lakh"
+        existing_model_run_name = "ddpm_lakh_1910_mono"
 
-        existing_model_abs_path = os.path.join(current_dir, "checkpoints", existing_model_run_name,
+        existing_model_abs_path = os.path.join(to_save_dir, "checkpoints", existing_model_run_name,
                                                "min_checkpoint.pth.tar")
         checkpoint = torch.load(existing_model_abs_path)
         model.load_state_dict(checkpoint["state_dict"])
 
+        min_val_loss_start = float("inf")
         print(f"starting from pretrained lakh model {existing_model_abs_path}")
     else:
         if continue_training:
             existing_model_run_name = run_name
-            existing_model_abs_path = os.path.join(current_dir, "checkpoints", existing_model_run_name,
+            existing_model_abs_path = os.path.join(to_save_dir, "checkpoints", existing_model_run_name,
                                                    "last_checkpoint.pth.tar")
             checkpoint = torch.load(existing_model_abs_path)
 

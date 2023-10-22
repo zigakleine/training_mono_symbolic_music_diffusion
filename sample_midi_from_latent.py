@@ -3,7 +3,7 @@ import numpy as np
 from diffusion_main import Diffusion, inverse_data_transform
 import torch
 import pickle
-from models.transformer_film import TransformerDDPM
+from models.transformer_film_mono import TransformerDDPME
 from singletrack_VAE import singletrack_vae, db_processing
 import uuid
 
