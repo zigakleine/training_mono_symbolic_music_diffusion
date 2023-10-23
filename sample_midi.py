@@ -14,13 +14,15 @@ def sample_midi():
     random_emotions = torch.tensor(random_emotions).to(device)
     sampled_latents = diffusion.sample(model, num_samples_to_generate, random_emotions, cfg_scale=3)
     batch_transformed = inverse_data_transform(torch.Tensor.cpu(sampled_latents), -14., 14.)
-    batch_split = np.split(batch_transformed[0], 4, axis=1)
-    batch_ = np.vstack(batch_split)
 
-    decoded_song = vae.decode_sequence(batch_, total_steps, temperature)
-    decoded_song_survey = decoded_song[:15]
+    decoded_melody_eval = vae.decode_sequence(batch_transformed, total_steps, temperature)[0]
+    decoded_melody_survey = decoded_melody_eval[:15]
+
+    decoded_song_eval = db_proc.song_from_melody(decoded_melody_eval)
+    decoded_song_survey = db_proc.song_from_melody(decoded_melody_survey)
+
     generated_midi_survey = db_proc.midi_from_song(decoded_song_survey)
-    generated_midi_eval = db_proc.midi_from_song(decoded_song)
+    generated_midi_eval = db_proc.midi_from_song(decoded_song_eval)
     return generated_midi_survey, generated_midi_eval
 
 
@@ -59,7 +61,7 @@ survey_samples_dir = os.path.join(current_dir, survey_samples_folder_name)
 eval_samples_dir = os.path.join(current_dir, eval_samples_folder_name)
 
 if not os.path.exists(survey_samples_dir):
-    os.mkdir(survey_samples_dir)
+    os.mkdir(s)
 
 if not os.path.exists(eval_samples_dir):
     os.mkdir(eval_samples_dir)
