@@ -36,7 +36,9 @@ model = TransformerDDPME(categories).to(device)
 
 diffusion = Diffusion(noise_steps=model.num_timesteps, batch_size=batch_size, vocab_size=model.vocab_size,
                       time_steps=model.seq_len)
-checkpoint = torch.load("./min_checkpoint.pth.tar", map_location=device)
+
+checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_1910_mono/min_checkpoint.pth.tar"
+checkpoint = torch.load(checkpoint_path, map_location=device)
 model.load_state_dict(checkpoint["state_dict"])
 print("epoch:", checkpoint["epoch"])
 
