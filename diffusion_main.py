@@ -164,14 +164,14 @@ def train():
 
     is_lakh = False
     continue_training = False
-    start_from_pretrained_model = True
+    start_from_pretrained_model = False
 
 
     if is_lakh:
         run_name = "ddpm_lakh_1910_mono"
 
     else:
-        run_name = "ddpm_lakh_nes_2310_mono"
+        run_name = "ddpm_nes_2310_mono"
 
     if start_from_pretrained_model:
         existing_model_run_name = "ddpm_lakh_1910_mono"
