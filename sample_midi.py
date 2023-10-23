@@ -16,7 +16,7 @@ def sample_midi():
     batch_transformed = inverse_data_transform(torch.Tensor.cpu(sampled_latents), -14., 14.)
 
     decoded_melody_eval = vae.decode_sequence(batch_transformed, total_steps, temperature)[0]
-    decoded_melody_survey = decoded_melody_eval[:15]
+    decoded_melody_survey = decoded_melody_eval[:15*16]
 
     decoded_song_eval = db_proc.song_from_melody(decoded_melody_eval)
     decoded_song_survey = db_proc.song_from_melody(decoded_melody_survey)
@@ -38,6 +38,7 @@ diffusion = Diffusion(noise_steps=model.num_timesteps, batch_size=batch_size, vo
                       time_steps=model.seq_len)
 
 checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_1910_mono/min_checkpoint.pth.tar"
+# checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_lakh_1910_mono/min_checkpoint.pth.tar"
 checkpoint = torch.load(checkpoint_path, map_location=device)
 model.load_state_dict(checkpoint["state_dict"])
 print("epoch:", checkpoint["epoch"])
