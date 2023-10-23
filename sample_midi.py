@@ -63,7 +63,7 @@ survey_samples_dir = os.path.join(current_dir, survey_samples_folder_name)
 eval_samples_dir = os.path.join(current_dir, eval_samples_folder_name)
 
 if not os.path.exists(survey_samples_dir):
-    os.mkdir(s)
+    os.mkdir(survey_samples_dir)
 
 if not os.path.exists(eval_samples_dir):
     os.mkdir(eval_samples_dir)
