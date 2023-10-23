@@ -171,7 +171,7 @@ def train():
         run_name = "ddpm_lakh_1910_mono"
 
     else:
-        run_name = "ddpm_lakh_nes_1910_mono"
+        run_name = "ddpm_lakh_nes_2310_mono"
 
     if start_from_pretrained_model:
         existing_model_run_name = "ddpm_lakh_1910_mono"
