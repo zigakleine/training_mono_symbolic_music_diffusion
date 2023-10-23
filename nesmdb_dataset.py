@@ -38,15 +38,15 @@ class NesmdbMidiDataset(Dataset):
             for song in metadata[game]["songs"]:
                 if song["is_encodable"]:
 
-                    emotion_q = self.emotions[song["emotion_pred_same_vel"]]
+                    # emotion_q = self.emotions[song["emotion_pred_same_vel"]]
                     song_rel_urls = song["encoded_song_urls"]
                     for song_rel_url in song_rel_urls:
                         # if song_rel_url == "nesmdb_encoded/322_SuperMarioBros_/0*+0*p1-p2-tr-no.pkl":
 
-                        # if song_rel_url[-6:] == "p1.pkl":
-                        #     emotion_q = self.emotions[song["emotion_pred_p1"]]
-                        # elif song_rel_url[-6:] == "p2.pkl":
-                        #     emotion_q = self.emotions[song["emotion_pred_p2"]]
+                        if song_rel_url[-6:] == "p1.pkl":
+                            emotion_q = self.emotions[song["emotion_pred_p1"]]
+                        elif song_rel_url[-6:] == "p2.pkl":
+                            emotion_q = self.emotions[song["emotion_pred_p2"]]
 
                         for i in range(song["num_sequences"]):
 
