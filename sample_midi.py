@@ -36,9 +36,13 @@ model = TransformerDDPME(categories).to(device)
 
 diffusion = Diffusion(noise_steps=model.num_timesteps, batch_size=batch_size, vocab_size=model.vocab_size,
                       time_steps=model.seq_len)
+run_folder_name = "lakh_nes"
 
-checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_1910_mono/min_checkpoint.pth.tar"
-# checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_lakh_1910_mono/min_checkpoint.pth.tar"
+if run_folder_name == "nes":
+    checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_1910_mono/min_checkpoint.pth.tar"
+elif run_folder_name == "lakh_nes":
+    checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_lakh_nes_1910_mono/min_checkpoint.pth.tar"
+
 checkpoint = torch.load(checkpoint_path, map_location=device)
 model.load_state_dict(checkpoint["state_dict"])
 print("epoch:", checkpoint["epoch"])
@@ -56,7 +60,7 @@ nesmdb_shared_library_path = os.path.join(current_dir, nesmdb_shared_library_rel
 db_proc = db_processing(nesmdb_shared_library_path, db_type)
 vae = singletrack_vae(model_path, batch_size)
 
-run_folder_name = "nes"
+
 survey_samples_folder_name = "samples_survey_" + run_folder_name
 eval_samples_folder_name = "samples_eval_" + run_folder_name
 
