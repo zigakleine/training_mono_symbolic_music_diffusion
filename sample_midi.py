@@ -25,7 +25,7 @@ def sample_midi():
     generated_midi_survey = db_proc.midi_from_song(decoded_song_survey)
     generated_midi_eval = db_proc.midi_from_song(decoded_song_eval)
 
-    emotion = int(random_emotions.numpy()[0])
+    emotion = int(torch.Tensor.cpu(random_emotions).numpy()[0])
     return generated_midi_survey, generated_midi_eval, emotion
 
 
