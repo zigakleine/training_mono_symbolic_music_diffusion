@@ -7,6 +7,7 @@ from models.transformer_film_mono import TransformerDDPME
 from singletrack_VAE import singletrack_vae, db_processing
 import uuid
 import random
+import json
 
 def sample_midi():
 
@@ -23,7 +24,9 @@ def sample_midi():
 
     generated_midi_survey = db_proc.midi_from_song(decoded_song_survey)
     generated_midi_eval = db_proc.midi_from_song(decoded_song_eval)
-    return generated_midi_survey, generated_midi_eval
+
+    emotion = random_emotions[0]
+    return generated_midi_survey, generated_midi_eval, emotion
 
 
 current_dir = os.getcwd()
@@ -36,10 +39,10 @@ model = TransformerDDPME(categories).to(device)
 
 diffusion = Diffusion(noise_steps=model.num_timesteps, batch_size=batch_size, vocab_size=model.vocab_size,
                       time_steps=model.seq_len)
-run_folder_name = "lakh_nes"
+run_folder_name = "nes"
 
 if run_folder_name == "nes":
-    checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_1910_mono/min_checkpoint.pth.tar"
+    checkpoint_path = "./min_checkpoint.pth.tar"
 elif run_folder_name == "lakh_nes":
     checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_lakh_nes_1910_mono/min_checkpoint.pth.tar"
 
@@ -73,12 +76,24 @@ if not os.path.exists(survey_samples_dir):
 if not os.path.exists(eval_samples_dir):
     os.mkdir(eval_samples_dir)
 
-for i in range(100):
+
+generated_songs_metadata = []
+for i in range(1):
     uuid_string = str(uuid.uuid4())
     print("iteration:", i)
     midi_output_path_survey = os.path.join(survey_samples_dir, uuid_string + ".mid")
     midi_output_path_eval = os.path.join(eval_samples_dir, "eval_" + str(i) + ".mid")
 
-    generated_midi_survey, generated_midi_eval = sample_midi()
+    generated_midi_survey, generated_midi_eval, emotion = sample_midi()
+    song_metadata = {"survey_rel_path": (os.path.join(survey_samples_folder_name, uuid_string + ".mid")),
+                     "eval_real_path": (os.path.join(eval_samples_folder_name, "eval_" + str(i) + ".mid")), emotion: emotion}
     generated_midi_survey.save(midi_output_path_survey)
     generated_midi_eval.save(midi_output_path_eval)
+    generated_songs_metadata.append(song_metadata)
+
+metadata_file = json.dumps(generated_songs_metadata, indent=4)
+metadata_abs_path = os.path.join(current_dir, eval_samples_folder_name,   "generated_songs_metadata.json")
+file_json = open(metadata_abs_path, 'w')
+file_json.write(metadata_file)
+file_json.close()
+
