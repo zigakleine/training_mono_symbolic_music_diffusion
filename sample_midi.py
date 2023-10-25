@@ -13,7 +13,7 @@ def sample_midi():
 
     random_emotions = [random.randint(0, 3) for _ in range(num_samples_to_generate)]
     random_emotions = torch.tensor(random_emotions).to(device)
-    sampled_latents = diffusion.sample(model, num_samples_to_generate, random_emotions, cfg_scale=3)
+    sampled_latents = diffusion.sample(model, num_samples_to_generate, random_emotions, cfg_scale=0.5)
     batch_transformed = inverse_data_transform(torch.Tensor.cpu(sampled_latents), -14., 14.)
 
     decoded_melody_eval = vae.decode_sequence(batch_transformed, total_steps, temperature)[0]
@@ -39,7 +39,7 @@ model = TransformerDDPME(categories).to(device)
 
 diffusion = Diffusion(noise_steps=model.num_timesteps, batch_size=batch_size, vocab_size=model.vocab_size,
                       time_steps=model.seq_len)
-run_folder_name = "lakh_nes+"
+run_folder_name = "nes+"
 
 if run_folder_name == "nes":
     checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_1910_mono/min_checkpoint.pth.tar"
