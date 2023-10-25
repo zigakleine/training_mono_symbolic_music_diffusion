@@ -46,7 +46,7 @@ if run_folder_name == "nes":
 elif run_folder_name == "lakh_nes":
     checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_lakh_nes_1910_mono/min_checkpoint.pth.tar"
 elif run_folder_name == "nes+":
-    checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_2310_mono/min_checkpoint.pth.tar"
+    checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nes_2310_mono/min_checkpoint.pth.tar"
 elif run_folder_name == "lakh_nes+":
     checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_lakh_nes_2310_mono/min_checkpoint.pth.tar"
 
