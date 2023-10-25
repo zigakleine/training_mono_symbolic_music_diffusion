@@ -13,7 +13,7 @@ def sample_midi():
 
     random_emotions = [random.randint(0, 3) for _ in range(num_samples_to_generate)]
     random_emotions = torch.tensor(random_emotions).to(device)
-    sampled_latents = diffusion.sample(model, num_samples_to_generate, random_emotions, cfg_scale=2)
+    sampled_latents = diffusion.sample(model, num_samples_to_generate, random_emotions, cfg_scale=3)
     batch_transformed = inverse_data_transform(torch.Tensor.cpu(sampled_latents), -14., 14.)
 
     decoded_melody_eval = vae.decode_sequence(batch_transformed, total_steps, temperature)[0]
