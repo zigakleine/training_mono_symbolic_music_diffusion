@@ -39,12 +39,17 @@ model = TransformerDDPME(categories).to(device)
 
 diffusion = Diffusion(noise_steps=model.num_timesteps, batch_size=batch_size, vocab_size=model.vocab_size,
                       time_steps=model.seq_len)
-run_folder_name = "nes"
+run_folder_name = "nes+"
 
 if run_folder_name == "nes":
     checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_1910_mono/min_checkpoint.pth.tar"
 elif run_folder_name == "lakh_nes":
     checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_lakh_nes_1910_mono/min_checkpoint.pth.tar"
+elif run_folder_name == "nes+":
+    checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_nesmdb_2310_mono/min_checkpoint.pth.tar"
+elif run_folder_name == "lakh_nes+":
+    checkpoint_path = "/storage/local/ssd/zigakleine-workspace/checkpoints/ddpm_lakh_nes_2310_mono/min_checkpoint.pth.tar"
+
 
 checkpoint = torch.load(checkpoint_path, map_location=device)
 model.load_state_dict(checkpoint["state_dict"])
@@ -86,7 +91,7 @@ for i in range(100):
 
     generated_midi_survey, generated_midi_eval, emotion = sample_midi()
     song_metadata = {"survey_rel_path": (os.path.join(survey_samples_folder_name, uuid_string + ".mid")),
-                     "eval_real_path": (os.path.join(eval_samples_folder_name, "eval_" + str(i) + ".mid")), "emotion": emotion}
+                     "eval_rel_path": (os.path.join(eval_samples_folder_name, "eval_" + str(i) + ".mid")), "emotion": emotion}
     generated_midi_survey.save(midi_output_path_survey)
     generated_midi_eval.save(midi_output_path_eval)
     generated_songs_metadata.append(song_metadata)
